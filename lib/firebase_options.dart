@@ -41,48 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAx3Tjh2FPOeDj7gbGAle4Ey_vPqgywpVE',
-    appId: '1:109677121478:web:23e86e784683db1b432cc7',
-    messagingSenderId: '109677121478',
-    projectId: 'fixpro-e07b3',
-    authDomain: 'fixpro-e07b3.firebaseapp.com',
-    storageBucket: 'fixpro-e07b3.appspot.com',
+    apiKey: 'AIzaSyCkmn48AyqcNNtUhe7BY76ryGKEu6njpdM',
+    appId: '1:1046272814865:web:23e86e784683db1b432cc7',
+    messagingSenderId: '1046272814865',
+    projectId: 'fixpro-b90fc',
+    authDomain: 'fixpro-b90fc.firebaseapp.com',
+    storageBucket: 'fixpro-b90fc.appspot.com',
     measurementId: 'G-QC0YSPRGGV',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC0ZU0_ESGP82mJLPxYxLppf-q0PFK1E9k',
-    appId: '1:109677121478:android:45a07023322e0779432cc7',
-    messagingSenderId: '109677121478',
-    projectId: 'fixpro-e07b3',
-    storageBucket: 'fixpro-e07b3.appspot.com',
+    apiKey: 'AIzaSyCkmn48AyqcNNtUhe7BY76ryGKEu6njpdM',
+    appId: '1:1046272814865:android:6d3034509747a1b86066b0',
+    messagingSenderId: '1046272814865',
+    projectId: 'fixpro-b90fc',
+    storageBucket: 'fixpro-b90fc.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDQcpUF2gDg-3WC22ygZTNsjmA6CIC73BI',
-    appId: '1:109677121478:ios:2946dada09c88b02432cc7',
-    messagingSenderId: '109677121478',
-    projectId: 'fixpro-e07b3',
-    storageBucket: 'fixpro-e07b3.appspot.com',
+    apiKey: 'AIzaSyCkmn48AyqcNNtUhe7BY76ryGKEu6njpdM',
+    appId: '1:1046272814865:ios:2946dada09c88b02432cc7',
+    messagingSenderId: '1046272814865',
+    projectId: 'fixpro-b90fc',
+    storageBucket: 'fixpro-b90fc.appspot.com',
     iosBundleId: 'com.example.fixPro',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDQcpUF2gDg-3WC22ygZTNsjmA6CIC73BI',
-    appId: '1:109677121478:ios:2946dada09c88b02432cc7',
-    messagingSenderId: '109677121478',
-    projectId: 'fixpro-e07b3',
-    storageBucket: 'fixpro-e07b3.appspot.com',
+    apiKey: 'AIzaSyCkmn48AyqcNNtUhe7BY76ryGKEu6njpdM',
+    appId: '1:1046272814865:ios:2946dada09c88b02432cc7',
+    messagingSenderId: '1046272814865',
+    projectId: 'fixpro-b90fc',
+    storageBucket: 'fixpro-b90fc.appspot.com',
     iosBundleId: 'com.example.fixPro',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAx3Tjh2FPOeDj7gbGAle4Ey_vPqgywpVE',
-    appId: '1:109677121478:web:12d88f102e29084f432cc7',
-    messagingSenderId: '109677121478',
-    projectId: 'fixpro-e07b3',
-    authDomain: 'fixpro-e07b3.firebaseapp.com',
-    storageBucket: 'fixpro-e07b3.appspot.com',
+    apiKey: 'AIzaSyCkmn48AyqcNNtUhe7BY76ryGKEu6njpdM',
+    appId: '1:1046272814865:web:12d88f102e29084f432cc7',
+    messagingSenderId: '1046272814865',
+    projectId: 'fixpro-b90fc',
+    authDomain: 'fixpro-b90fc.firebaseapp.com',
+    storageBucket: 'fixpro-b90fc.appspot.com',
     measurementId: 'G-TMR7RE46MS',
   );
 }
