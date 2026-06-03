@@ -51,7 +51,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       setState(() {
         _nameController.text = data['name'] ?? '';
         _countryCode = data['countryCode'] ?? '+60';
-        _phoneController.text = data['phoneNumber'] ?? '';
+        _phoneController.text = data['phone'] ?? '';
         _icController.text = data['ic'] ?? '';
         _addressController.text = data['address'] ?? '';
         _gender = data['gender'] ?? 'Male';
