@@ -96,7 +96,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final yy = int.parse(ic.substring(0, 2));
     final mm = int.parse(ic.substring(2, 4));
     final dd = int.parse(ic.substring(4, 6));
+    if (mm < 1 || mm > 12) {
+        return 'Invalid month';
+      }
 
+      if (dd < 1 || dd > 31) {
+        return 'Invalid day';
+      }
     final fullYear = (yy <= (DateTime.now().year % 100))
         ? 2000 + yy
         : 1900 + yy;
