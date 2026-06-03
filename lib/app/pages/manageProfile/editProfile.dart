@@ -77,6 +77,48 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+
+    String? validateIC(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter IC number';
+    }
+
+    final ic = value.replaceAll(RegExp(r'\D'), '');
+
+    if (ic.length != 12) {
+      return 'IC must be exactly 12 digits';
+    }
+
+    // birth date YYMMDD
+    final yy = int.parse(ic.substring(0, 2));
+    final mm = int.parse(ic.substring(2, 4));
+    final dd = int.parse(ic.substring(4, 6));
+
+    final fullYear = (yy <= (DateTime.now().year % 100))
+        ? 2000 + yy
+        : 1900 + yy;
+
+    final date = DateTime.tryParse(
+        '$fullYear-${mm.toString().padLeft(2, '0')}-${dd.toString().padLeft(2, '0')}');
+
+    if (date == null) {
+      return 'Invalid birth date';
+    }
+
+    // state code
+    final stateCode = ic.substring(6, 8);
+
+    const validStates = {
+      '01','02','03','04','05','06','07','08','09',
+      '10','11','12','13','14','15','16'
+    };
+
+    if (!validStates.contains(stateCode)) {
+      return 'Invalid state code';
+    }
+
+    return null;
+  }
   Future<void> _saveProfile() async {
     if (_formKey.currentState!.validate() && user != null) {
       await FirebaseFirestore.instance
@@ -255,11 +297,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           TextFormField(
                             controller: _icController,
                             decoration: const InputDecoration(
-                                labelText: 'IC Number'),
+                                labelText: 'IC Number (No Dashes, must be 12 digits number)'),
                             keyboardType: TextInputType.number,
-                            validator: (value) => value!.isEmpty
-                                ? 'Please enter IC number'
-                                : null,
+                            validator: validateIC
                           ),
                           TextFormField(
                             controller: _addressController,
