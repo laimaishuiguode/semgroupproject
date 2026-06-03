@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String? name;
   String? email;
   String? role;
+  String? countryCode;
   String? phone;
   String? address;
   String? icNumber;
@@ -48,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
           email = data['email'];
           role = data['role'];
           phone = data['phone'];
+          countryCode = data['countryCode'];
           address = data['address'];
           icNumber = data['ic'];
           gender = data['gender'];
@@ -99,7 +101,14 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final themeColor = AppTheme.getRoleColor(role ?? 'Owner');
-
+    String displayedPhone = '-';
+    if (phone != null && phone!.isNotEmpty) {
+      if (countryCode != null && countryCode!.isNotEmpty) {
+        displayedPhone = '$countryCode $phone'; 
+      } else {
+        displayedPhone = phone!;
+      }
+    }
     return Theme(
       data: AppTheme.getTheme(role ?? 'Owner'),
       child: Scaffold(
@@ -157,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 30),
                     _buildField("Name", name),
                     _buildField("Email", email),
-                    _buildField("Phone Number", phone),
+                    _buildField("Phone Number", displayedPhone),
                     _buildField("IC Number", icNumber),
                     _buildField("Address", address),
                     _buildField("Gender", gender),
