@@ -8,6 +8,8 @@ import '../manageWorkingSchedule/WorkScheduleList.dart';
 import '../manageInventory/inventoryList.dart';
 import '../managePayment/paymentinterface.dart';
 import '../manageRating/ratingDashboard.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -29,7 +31,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String? _imagePath;
   bool _isLoading = true;
   int _selectedIndex = 0;
-
+  double? _lat;
+  double? _lng;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -134,6 +137,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'phone': _phoneController.text.trim(),
         'ic': _icController.text.trim(),
         'address': _addressController.text.trim(),
+        'lat': _lat,
+        'lng': _lng,
         'gender': _gender,
         if (_imagePath != null) 'imagePath': _imagePath,
       });
@@ -145,6 +150,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         Navigator.pop(context);
       }
     }
+    
   }
 
   void _onItemTapped(int index) {
@@ -305,13 +311,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             keyboardType: TextInputType.number,
                             validator: validateIC
                           ),
-                          TextFormField(
-                            controller: _addressController,
-                            decoration:
-                                const InputDecoration(labelText: 'Address'),
-                            validator: (value) =>
-                                value!.isEmpty ? 'Please enter address' : null,
+                          GooglePlaceAutoCompleteTextField(
+                          textEditingController: _addressController,
+                          googleAPIKey: "AIzaSyATIBZVAqb4ixwm4ML6roQ6lEhnbPM0Tu8",
+
+                          inputDecoration: const InputDecoration(
+                            labelText: 'Address',
+                            hintText: 'Search address',
+                            suffixIcon: Icon(Icons.location_on),
                           ),
+
+                          debounceTime: 800,
+
+                          countries: const ["my"],
+
+                          isLatLngRequired: true,
+
+                          getPlaceDetailWithLatLng: (Prediction prediction) {
+                              setState(() {
+                                _lat = double.tryParse(prediction.lat ?? "");
+                                _lng = double.tryParse(prediction.lng ?? "");
+                              });
+                            print("lat: ${prediction.lat}");
+                            print("lng: ${prediction.lng}");
+                          },
+
+                          itemClick: (Prediction prediction) {
+                            setState(() {
+                              _addressController.text = prediction.description!;
+                            });
+
+                            FocusScope.of(context).unfocus();
+                          },
+                        ),
                           const SizedBox(height: 10),
                           const Align(
                             alignment: Alignment.centerLeft,
