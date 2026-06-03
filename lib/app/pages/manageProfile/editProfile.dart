@@ -23,7 +23,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final _icController = TextEditingController();
   final _addressController = TextEditingController();
   String _gender = 'Male';
-  String _role = 'Owner'; // Default fallback
+  String _role = 'Owner'; 
+  String _countryCode = '+60';// Default fallback
   File? _imageFile;
   String? _imagePath;
   bool _isLoading = true;
@@ -49,7 +50,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       final data = doc.data()!;
       setState(() {
         _nameController.text = data['name'] ?? '';
-        _phoneController.text = data['phone'] ?? '';
+        _countryCode = data['countryCode'] ?? '+60';
+        _phoneController.text = data['phoneNumber'] ?? '';
         _icController.text = data['ic'] ?? '';
         _addressController.text = data['address'] ?? '';
         _gender = data['gender'] ?? 'Male';
@@ -82,6 +84,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .doc(user!.uid)
           .update({
         'name': _nameController.text.trim(),
+        'countryCode': _countryCode,
         'phone': _phoneController.text.trim(),
         'ic': _icController.text.trim(),
         'address': _addressController.text.trim(),
@@ -176,15 +179,79 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             validator: (value) =>
                                 value!.isEmpty ? 'Please enter name' : null,
                           ),
-                          TextFormField(
-                            controller: _phoneController,
-                            decoration: const InputDecoration(
-                                labelText: 'Phone Number'),
-                            keyboardType: TextInputType.phone,
-                            validator: (value) => value!.isEmpty
-                                ? 'Please enter phone number'
-                                : null,
-                          ),
+                          Row(
+                          children: [
+                            SizedBox(
+                              width: 120,
+                              child: DropdownButtonFormField<String>(
+                                value: _countryCode,
+                                decoration: const InputDecoration(
+                                  labelText: 'Code',
+                                ),
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: '+60',
+                                    child: Text('🇲🇾 +60'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: '+65',
+                                    child: Text('🇸🇬 +65'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: '+62',
+                                    child: Text('🇮🇩 +62'),
+                                  ),
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    _countryCode = value!;
+                                  });
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(width: 10),
+
+                            Expanded(
+                              child: TextFormField(
+                                controller: _phoneController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Phone Number',
+                                ),
+                                keyboardType: TextInputType.phone,
+
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter phone number';
+                                  }
+
+                                  final phone =
+                                      value.replaceAll(RegExp(r'\D'), '');
+
+                                  if (_countryCode == '+60') {
+                                    if (phone.length < 9 || phone.length > 10) {
+                                      return 'Malaysia phone number must be 9-10 digits';
+                                    }
+                                  }
+
+                                  if (_countryCode == '+65') {
+                                    if (phone.length != 8) {
+                                      return 'Singapore phone number must be 8 digits';
+                                    }
+                                  }
+
+                                  if (_countryCode == '+62') {
+                                    if (phone.length < 9 || phone.length > 13) {
+                                      return 'Indonesia phone number must be 9-13 digits';
+                                    }
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                           TextFormField(
                             controller: _icController,
                             decoration: const InputDecoration(
