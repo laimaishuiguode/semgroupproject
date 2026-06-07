@@ -23,7 +23,6 @@ import 'app/pages/managePayment/paymentsuccess.dart';
 import 'app/pages/manageRating/ratingDashboard.dart';
 import 'app/pages/manageRating/foremanList.dart';
 import 'app/pages/manageWorkingSchedule/WorkCalendar.dart';
-import 'app/pages/manageWorkingSchedule/WorkScheduleList.dart';
 import 'app/pages/manageWorkingSchedule/AddWorkDetails.dart';
 import 'app/pages/manageWorkingSchedule/EditWorkingTime.dart';
 

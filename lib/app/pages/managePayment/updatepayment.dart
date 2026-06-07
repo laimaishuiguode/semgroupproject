@@ -3,9 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../../domain/paymentModel/payment.dart';
 import '../../services/payment_service.dart';
-import '../../theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
 class UpdatePaymentPage extends StatefulWidget {
   final Payment payment;
@@ -282,7 +280,7 @@ class _UpdatePaymentPageState extends State<UpdatePaymentPage> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
-                      value: _selectedStatus,
+                      initialValue: _selectedStatus,
                       decoration: const InputDecoration(
                         labelText: 'Status',
                       ),
@@ -302,7 +300,7 @@ class _UpdatePaymentPageState extends State<UpdatePaymentPage> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
-                      value: _selectedPaymentMethod,
+                      initialValue: _selectedPaymentMethod,
                       decoration: const InputDecoration(
                         labelText: 'Payment Method',
                       ),

@@ -249,7 +249,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
-                      value: _selectedPaymentMethod,
+                      initialValue: _selectedPaymentMethod,
                       decoration: const InputDecoration(
                         labelText: 'Payment Method',
                       ),
@@ -271,7 +271,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     _isForemanLoading
                         ? const Center(child: CircularProgressIndicator())
                         : DropdownButtonFormField<String>(
-                            value: _selectedForemanName,
+                            initialValue: _selectedForemanName,
                             decoration: const InputDecoration(
                               labelText: 'Foreman Name',
                             ),
@@ -295,9 +295,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                           ),
                     const SizedBox(height: 16),
                     ListTile(
-                      title: Text(_selectedDate == null
-                          ? 'Select Date'
-                          : DateFormat('yyyy-MM-dd').format(_selectedDate!)),
+                      title: Text(DateFormat('yyyy-MM-dd').format(_selectedDate)),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: _pickDate,
                       shape: RoundedRectangleBorder(
@@ -331,7 +329,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
-                      value: _selectedStatus,
+                      initialValue: _selectedStatus,
                       decoration: const InputDecoration(
                         labelText: 'Status',
                       ),
@@ -432,11 +430,11 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     // Slide to Pay button using slide_to_act package
                     Builder(
                       builder: (context) {
-                        final GlobalKey<SlideActionState> _key = GlobalKey();
+                        final GlobalKey<SlideActionState> key = GlobalKey();
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SlideAction(
-                            key: _key,
+                            key: key,
                             outerColor: Colors.green,
                             innerColor: Colors.white,
                             height: 60,
@@ -454,7 +452,8 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                               _submitForm();
                               // Reset the slider after submission, optionally with a delay
                               Future.delayed(const Duration(milliseconds: 500),
-                                  () => _key.currentState?.reset());
+                                  () => key.currentState?.reset());
+                              return null;
                             },
                           ),
                         );

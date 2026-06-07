@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class EditWorkingTimePage extends StatefulWidget {
@@ -11,12 +9,12 @@ class EditWorkingTimePage extends StatefulWidget {
   final String endTime;
 
   const EditWorkingTimePage({
-    Key? key,
+    super.key,
     required this.docId,
     required this.date,
     required this.startTime,
     required this.endTime,
-  }) : super(key: key);
+  });
 
   @override
   State<EditWorkingTimePage> createState() => _EditWorkingTimePageState();
@@ -218,10 +216,11 @@ class _EditWorkingTimePageState extends State<EditWorkingTimePage> {
         );
       }
     } finally {
-      if (mounted)
+      if (mounted) {
         setState(() {
           isLoading = false;
         });
+      }
     }
   }
 

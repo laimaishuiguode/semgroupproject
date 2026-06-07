@@ -103,7 +103,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   },
                 ),
                 DropdownButtonFormField<String>(
-                  value: _selectedRole,
+                  initialValue: _selectedRole,
                   items: ['Owner', 'Foreman']
                       .map(
                         (role) => DropdownMenuItem(

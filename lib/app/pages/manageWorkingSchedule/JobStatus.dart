@@ -12,7 +12,7 @@ class JobStatusPage extends StatefulWidget {
   final String endTime;
 
   const JobStatusPage({
-    Key? key,
+    super.key,
     required this.scheduleId,
     this.vehicleName,
     this.vehicleColor,
@@ -21,7 +21,7 @@ class JobStatusPage extends StatefulWidget {
     required this.date,
     required this.startTime,
     required this.endTime,
-  }) : super(key: key);
+  });
 
   @override
   State<JobStatusPage> createState() => _JobStatusPageState();

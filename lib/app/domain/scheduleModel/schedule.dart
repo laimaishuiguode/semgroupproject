@@ -49,10 +49,6 @@ class Schedule {
   // Update an existing schedule
   Future<void> updateSchedule(ScheduleModel schedule) async {
     try {
-      if (schedule.id == null) {
-        throw Exception('Schedule ID is required for update');
-      }
-
       final docRef = _collection.doc(schedule.id);
       final doc = await docRef.get();
 
