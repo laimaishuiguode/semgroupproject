@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RatingDashboardPage extends StatelessWidget {
-  final String userRole; // 'owner' or 'foreman'
+  final String userRole;
 
   const RatingDashboardPage({
     super.key,
@@ -24,7 +24,6 @@ class RatingDashboardPage extends StatelessWidget {
     );
   }
 
-  /// OWNER DASHBOARD
   Widget _buildOwnerContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -40,13 +39,19 @@ class RatingDashboardPage extends StatelessWidget {
             const SizedBox(height: 20),
             const Text(
               'Rate Foreman',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 10),
             const Text(
               'Your feedback helps us improve service quality.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
             ),
             const SizedBox(height: 30),
             ElevatedButton.icon(
@@ -55,12 +60,6 @@ class RatingDashboardPage extends StatelessWidget {
               },
               icon: const Icon(Icons.rate_review),
               label: const Text('Rate Now'),
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                textStyle: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold),
-              ),
             ),
           ],
         ),
@@ -68,9 +67,10 @@ class RatingDashboardPage extends StatelessWidget {
     );
   }
 
-  /// FOREMAN DASHBOARD
   Widget _buildForemanContent() {
     final String? foremanId = FirebaseAuth.instance.currentUser?.uid;
+
+    print("Current User ID: $foremanId");
 
     if (foremanId == null) {
       return const Center(
@@ -87,15 +87,43 @@ class RatingDashboardPage extends StatelessWidget {
             .orderBy('timestamp', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
+          print("========== RATING DEBUG ==========");
+          print("Connection State: ${snapshot.connectionState}");
+          print("Has Data: ${snapshot.hasData}");
+          print("Error: ${snapshot.error}");
+
+          if (snapshot.hasData) {
+            print("Documents Found: ${snapshot.data!.docs.length}");
+
+            for (var doc in snapshot.data!.docs) {
+              print("Rating Document:");
+              print(doc.data());
+            }
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Firestore Error:\n${snapshot.error}',
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
               child: Text(
                 'You have not received any ratings yet.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
               ),
             );
           }
@@ -105,8 +133,20 @@ class RatingDashboardPage extends StatelessWidget {
           return ListView.builder(
             itemCount: ratings.length,
             itemBuilder: (context, index) {
-              final data = ratings[index].data() as Map<String, dynamic>;
+              final data =
+                  ratings[index].data() as Map<String, dynamic>;
+
               final jobId = data['jobId'];
+
+              print("Job ID: $jobId");
+
+              if (jobId == null) {
+                return const Card(
+                  child: ListTile(
+                    title: Text("Missing Job ID"),
+                  ),
+                );
+              }
 
               return FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
@@ -114,14 +154,23 @@ class RatingDashboardPage extends StatelessWidget {
                     .doc(jobId)
                     .get(),
                 builder: (context, scheduleSnapshot) {
+                  print(
+                    "Schedule Snapshot Error: ${scheduleSnapshot.error}",
+                  );
+
                   String jobAssignment = "Loading job...";
 
-                  if (scheduleSnapshot.connectionState == ConnectionState.done &&
+                  if (scheduleSnapshot.connectionState ==
+                          ConnectionState.done &&
                       scheduleSnapshot.hasData &&
                       scheduleSnapshot.data!.exists) {
                     final scheduleData =
-                        scheduleSnapshot.data!.data() as Map<String, dynamic>?;
-                    jobAssignment = scheduleData?['job_assignment'] ?? 'No job assignment';
+                        scheduleSnapshot.data!.data()
+                            as Map<String, dynamic>?;
+
+                    jobAssignment =
+                        scheduleData?['job_assignment'] ??
+                            'No job assignment';
                   }
 
                   return Card(
@@ -129,16 +178,28 @@ class RatingDashboardPage extends StatelessWidget {
                     child: ListTile(
                       title: Text(jobAssignment),
                       subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
                         children: [
-                          Text("Performance: ${data['performance']}"),
-                          Text("Communication: ${data['communication']}"),
-                          Text("Skills: ${data['skills']}"),
+                          Text(
+                            "Performance: ${data['performance']}",
+                          ),
+                          Text(
+                            "Communication: ${data['communication']}",
+                          ),
+                          Text(
+                            "Skills: ${data['skills']}",
+                          ),
                           if (data['comment'] != null &&
-                              data['comment'].toString().isNotEmpty)
+                              data['comment']
+                                  .toString()
+                                  .isNotEmpty)
                             Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Text("Comment: ${data['comment']}"),
+                              padding:
+                                  const EdgeInsets.only(top: 4),
+                              child: Text(
+                                "Comment: ${data['comment']}",
+                              ),
                             ),
                         ],
                       ),
