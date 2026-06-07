@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../manageRegistration/firstPage.dart';
 import '../manageProfile/profileInterface.dart';
-import '../manageWorkingSchedule/WorkCalendar.dart';
 import '../manageInventory/inventoryList.dart';
 import '../managePayment/paymentinterface.dart';
 import '../manageRating/ratingDashboard.dart';

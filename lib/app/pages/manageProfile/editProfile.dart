@@ -242,7 +242,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             SizedBox(
                               width: 120,
                               child: DropdownButtonFormField<String>(
-                                value: _countryCode,
+                                initialValue: _countryCode,
                                 decoration: const InputDecoration(
                                   labelText: 'Code',
                                 ),

@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:fix_pro/app/pages/manageWorkingSchedule/AddWorkingTime.dart';
-import 'package:fix_pro/app/pages/manageWorkingSchedule/AddWorkingTime.dart'
-    as working_time;
 //import 'package:fix_pro/app/pages/manageWorkingSchedule/AddWorkDetails.dart'; // keep this if you also use it elsewhere
-import 'package:fix_pro/app/pages/manageWorkingSchedule/AddWorkDetails.dart';
 import 'package:fix_pro/app/pages/manageRating/addRating.dart';
 
 class OwnerCalendarPage extends StatefulWidget {
