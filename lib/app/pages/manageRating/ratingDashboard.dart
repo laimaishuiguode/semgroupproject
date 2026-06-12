@@ -11,6 +11,7 @@ class RatingDashboardPage extends StatelessWidget {
   });
 
   @override
+  // This widget serves as the main dashboard for ratings. It displays different content based on the user's role (owner or foreman).
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,7 +66,7 @@ class RatingDashboardPage extends StatelessWidget {
         ),
       ),
     );
-  }
+  } 
 
   Widget _buildForemanContent() {
     final String? foremanId = FirebaseAuth.instance.currentUser?.uid;
