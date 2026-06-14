@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RatingDashboardPage extends StatelessWidget {
-  final String userRole;
+  final String userRole; // 'owner' or 'foreman'
 
   const RatingDashboardPage({
     super.key,
@@ -24,6 +24,7 @@ class RatingDashboardPage extends StatelessWidget {
     );
   }
 
+  /// OWNER DASHBOARD
   Widget _buildOwnerContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -66,7 +67,8 @@ class RatingDashboardPage extends StatelessWidget {
       ),
     );
   }
-
+  
+  /// FOREMAN DASHBOARD
   Widget _buildForemanContent() {
     final String? foremanId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -81,6 +83,9 @@ class RatingDashboardPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: StreamBuilder<QuerySnapshot>(
+        // Dashboard Firestore query (Foreman ratings)
+        // Error: FAILED_PRECONDITION due to missing Firestore composite index
+        // Requires composite index: foremanId + timestamp
         stream: FirebaseFirestore.instance
             .collection('ratings')
             .where('foremanId', isEqualTo: foremanId)
@@ -133,8 +138,7 @@ class RatingDashboardPage extends StatelessWidget {
           return ListView.builder(
             itemCount: ratings.length,
             itemBuilder: (context, index) {
-              final data =
-                  ratings[index].data() as Map<String, dynamic>;
+              final data = ratings[index].data() as Map<String, dynamic>;
 
               final jobId = data['jobId'];
 
@@ -165,12 +169,10 @@ class RatingDashboardPage extends StatelessWidget {
                       scheduleSnapshot.hasData &&
                       scheduleSnapshot.data!.exists) {
                     final scheduleData =
-                        scheduleSnapshot.data!.data()
-                            as Map<String, dynamic>?;
+                        scheduleSnapshot.data!.data() as Map<String, dynamic>?;
 
                     jobAssignment =
-                        scheduleData?['job_assignment'] ??
-                            'No job assignment';
+                        scheduleData?['job_assignment'] ?? 'No job assignment';
                   }
 
                   return Card(
@@ -178,8 +180,7 @@ class RatingDashboardPage extends StatelessWidget {
                     child: ListTile(
                       title: Text(jobAssignment),
                       subtitle: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Performance: ${data['performance']}",
@@ -191,12 +192,9 @@ class RatingDashboardPage extends StatelessWidget {
                             "Skills: ${data['skills']}",
                           ),
                           if (data['comment'] != null &&
-                              data['comment']
-                                  .toString()
-                                  .isNotEmpty)
+                              data['comment'].toString().isNotEmpty)
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 "Comment: ${data['comment']}",
                               ),
