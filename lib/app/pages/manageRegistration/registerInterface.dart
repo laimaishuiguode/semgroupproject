@@ -17,6 +17,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _confirmPassword = TextEditingController();
   String? _selectedRole;
 
+  // Perfective Maintenance: State variables for Show/Hide Password toggles
+  bool _isPasswordObscured = true;
+  bool _isConfirmPasswordObscured = true;
+
   Future<void> _registerUser() async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -66,7 +70,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     SizedBox(width: 10),
                     Text(
                       "FixUp Pro",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -98,7 +103,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (value == null || value.isEmpty) {
                       return 'Email is required';
                     }
-                    if (!value.contains('@')) return 'Invalid email format';
+                    // Perfective Maintenance: Strict Regex for Email format
+                    final emailRegex =
+                        RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                    if (!emailRegex.hasMatch(value)) {
+                      return 'Invalid email format';
+                    }
                     return null;
                   },
                 ),
@@ -122,21 +132,63 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 TextFormField(
                   controller: _password,
-                  obscureText: true,
-                  decoration: const InputDecoration(
+                  obscureText: _isPasswordObscured, // Bound to state variable
+                  decoration: InputDecoration(
                     labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: const Icon(Icons.lock),
+                    // Perfective Maintenance: Show/Hide Toggle Button
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordObscured
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordObscured = !_isPasswordObscured;
+                        });
+                      },
+                    ),
                   ),
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Password is required'
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password is required';
+                    }
+                    // Perfective Maintenance: Password Strength Regex Validation
+                    if (value.length < 8) {
+                      return 'Password must be at least 8 characters';
+                    }
+                    final passwordRegex =
+                        RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+                    if (!passwordRegex.hasMatch(value)) {
+                      return 'Password must contain at least one letter and one number';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   controller: _confirmPassword,
-                  obscureText: true,
-                  decoration: const InputDecoration(
+                  obscureText:
+                      _isConfirmPasswordObscured, // Bound to state variable
+                  decoration: InputDecoration(
                     labelText: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock_outline),
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    // Perfective Maintenance: Show/Hide Toggle Button
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isConfirmPasswordObscured
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isConfirmPasswordObscured =
+                              !_isConfirmPasswordObscured;
+                        });
+                      },
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
