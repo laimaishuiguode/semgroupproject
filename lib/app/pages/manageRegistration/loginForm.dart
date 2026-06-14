@@ -17,6 +17,9 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isLoading = false;
 
+  // Perfective Maintenance: State variable for Show/Hide Password toggle
+  bool _isPasswordObscured = true;
+
   Future<void> _loginUser() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -37,10 +40,8 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       // 2. Get Firestore user profile
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+      DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (!userDoc.exists) {
         throw Exception("User profile not found in Firestore");
@@ -127,7 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                           if (value == null || value.isEmpty) {
                             return 'Email is required';
                           }
-                          if (!value.contains('@')) {
+                          // Perfective Maintenance: Strict Regex for Email format
+                          final emailRegex =
+                              RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                          if (!emailRegex.hasMatch(value)) {
                             return 'Invalid email format';
                           }
                           return null;
@@ -139,17 +143,38 @@ class _LoginPageState extends State<LoginPage> {
                       // PASSWORD
                       TextFormField(
                         controller: _password,
-                        obscureText: true,
-                        decoration: const InputDecoration(
+                        obscureText:
+                            _isPasswordObscured, // Bound to state variable
+                        decoration: InputDecoration(
                           labelText: 'Password',
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
+                          // Perfective Maintenance: Show/Hide Toggle Button
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordObscured
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordObscured = !_isPasswordObscured;
+                              });
+                            },
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Password is required';
                           }
-                          if (value.length < 6) {
-                            return 'Min 6 characters';
+                          // Perfective Maintenance: Password Strength Regex Validation
+                          if (value.length < 8) {
+                            return 'Password must be at least 8 characters';
+                          }
+                          final passwordRegex =
+                              RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+                          if (!passwordRegex.hasMatch(value)) {
+                            return 'Password must contain at least one letter and one number';
                           }
                           return null;
                         },
